@@ -24,3 +24,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/departamentos',function (){
     return Http::get('http://sigma-studios.s3-us-west-2.amazonaws.com/test/colombia.json')->json();
 });
+
+

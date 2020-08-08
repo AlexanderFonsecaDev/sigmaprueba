@@ -8,6 +8,10 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import VueSweetalert2 from 'vue-sweetalert2';
+
+Vue.use(VueSweetalert2);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -38,25 +42,54 @@ const app = new Vue({
             nombre: '',
             correo: ''
         },
-        departamentos:[],
-        ciudades:[]
+        departamentos: [],
+        ciudades: []
     },
     mounted() {
 
-        axios.get("http://localhost:8000/api/departamentos").then(response =>{
+        axios.get("http://localhost:8000/api/departamentos").then(response => {
+            console.log(response);
             this.departamentos = response.data;
-        }).catch(error=>{
+        }).catch(error => {
             console.log(error);
         });
 
     },
     methods: {
-        cargarCiudades(){
+        cargarCiudades() {
             this.ciudades = this.departamentos[this.form.deparatamento];
         },
 
-        enviarFormulario(){
+       /* cargarDepartamentos() {
+            axios.get("http://localhost:8000/api/departamentos").then(response => {
+                this.departamentos = response.data;
+            }).catch(error => {
+                console.log(error);
+            });
+        },*/
 
+        enviarFormulario:function (e){
+            if (this.form.deparatamento && this.form.ciudad && this.form.nombre && this.form.correo) {
+                return true;
+                /*this.vaciarFormulario();
+                this.cargarDepartamentos();*/
+            } else {
+                e.preventDefault();
+                this.$swal({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Completa todos los campos para enviar el formulario',
+                });
+            }
+        },
+
+        vaciarFormulario() {
+            this.ciudades = [];
+            this.departamentos = [];
+            this.form.departamento = "";
+            this.form.ciudad = "";
+            this.form.nombre = "";
+            this.form.correo = "";
         }
 
     }
